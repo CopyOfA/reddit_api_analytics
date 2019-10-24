@@ -1,0 +1,32 @@
+CREATE TABLE nce14.reddit_authors(
+    author_id INT PRIMARY KEY,
+    author VARCHAR(100)
+    );
+    
+
+CREATE TABLE nce14.reddit_subreddits(
+    subreddit_id INT PRIMARY KEY,
+    subreddit VARCHAR(100)
+    );
+    
+    
+CREATE TABLE nce14.reddit_titles(
+    title_id INT PRIMARY KEY,
+    title VARCHAR(1000),
+    summary_text VARCHAR(7000),
+    dttm TIMESTAMP,
+    link VARCHAR(1000),
+    subreddit_id INT,
+    FOREIGN KEY (subreddit_id)
+        REFERENCES reddit_subreddits(subreddit_id)
+    );
+    
+
+CREATE TABLE nce14.reddit_title_authors(
+    title_id INT,
+    FOREIGN KEY (title_id)
+        REFERENCES reddit_titles(title_id),
+    author_id INT,
+    FOREIGN KEY (author_id)
+        REFERENCES reddit_authors(author_id)
+    );
