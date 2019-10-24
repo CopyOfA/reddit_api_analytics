@@ -2,6 +2,7 @@ import feedparser
 from bs4 import BeautifulSoup
 from bs4.element import Comment
 import numpy as np
+import pandas as pd
 
 def tag_visible(element):
     if element.parent.name in ['style', 'script', 'head', 'title', 'meta', '[document]']:
@@ -102,3 +103,16 @@ while len(data['title'])<400:
                         data['subreddit_id'].append(sid)
                         sid += 1
                     tid += 1
+
+
+df = pd.DataFrame(data=data)
+df = df.where(pd.notnull(df), None)
+
+author = df[['author_id','author']].drop_duplicates()
+
+subreddit = df[['subreddit_id','subreddit']].drop_duplicates()
+
+title = df[['title_id', 'title', 'summary_text', 'link', 'dttm', 'subreddit_id']]
+
+title_author = df[['title_id','title','author']].merge(author, how='outer', on='author')
+title_author = title_author[['author_id','title_id']]
